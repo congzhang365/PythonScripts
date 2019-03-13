@@ -37,13 +37,13 @@ def remove_labels(file, old_text, new_text, output_file):
 
 
 if __name__ == '__main__':
-    text = 'D:\Rokid\pycharm\DataTest/000001-010000.txt'
-    separate_lines(text, 'text', 'pinyin')
+    text = 'D:\Rokid\data\儿童005001-005500.txt'
+    separate_lines(text, '儿童005001-005500_text', '儿童005001-005500_pinyin')
 
     # chinese = 'D:\Rokid\pycharm\DataTest\chinese.txt'
     # old_text = re.compile(r'(#1)|(#2)|(#3)|(#4)')
     # new_text = ''
     # remove_labels(chinese, old_text, new_text, 'clean')
-
-    no_punc = 'D:\Rokid\pycharm\DataTest/no_punc.txt'
-    remove_labels(no_punc, '')
+    #
+    # no_punc = 'D:\Rokid\pycharm\DataTest/no_punc.txt'
+    # remove_labels(no_punc, '')
