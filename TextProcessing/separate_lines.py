@@ -37,8 +37,8 @@ def remove_labels(file, old_text, new_text, output_file):
 
 
 if __name__ == '__main__':
-    text = 'D:\Rokid\data\儿童005001-005500.txt'
-    separate_lines(text, '儿童005001-005500_text', '儿童005001-005500_pinyin')
+    text = "D:\Rokid\data\儿童005501-006000.txt"
+    separate_lines(text, 'song1000_text', 0)
 
     # chinese = 'D:\Rokid\pycharm\DataTest\chinese.txt'
     # old_text = re.compile(r'(#1)|(#2)|(#3)|(#4)')
