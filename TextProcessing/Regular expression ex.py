@@ -1,3 +1,5 @@
+# These are exercises from an onlines source
+
 import re
 
 with open('D:\Rokid\pycharm\English\mix/text.txt', 'r', encoding='utf-8') as file:
