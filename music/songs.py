@@ -4,6 +4,8 @@ Author: Addy771
 Description:
 A script which converts MIDI files to WAV and optionally to MP3 using ffmpeg.
 Works by playing each file and using the stereo mix device to record at the same time
+
+Save this script to where your input directory is
 """
 
 import pyaudio  # audio recording
@@ -12,11 +14,10 @@ import pygame  # midi playback
 import fnmatch  # name matching
 import os  # file listing
 
-def midi_wav(input_dir, sampling_rate)
 #### CONFIGURATION ####
 
-do_ffmpeg_convert = True  # Uses FFmpeg to convert WAV files to MP3. Requires ffmpeg.exe in the script folder or PATH
-do_wav_cleanup = True  # Deletes WAV files after conversion to MP3
+do_ffmpeg_convert = False  # Uses FFmpeg to convert WAV files to MP3. Requires ffmpeg.exe in the script folder or PATH
+do_wav_cleanup = False  # Deletes WAV files after conversion to MP3
 sample_rate = 44100  # Sample rate used for WAV/MP3
 channels = 2  # Audio channels (1 = mono, 2 = stereo)
 buffer = 1024  # Audio buffer size
