@@ -1,7 +1,28 @@
 import re
+import os
 
-def scale_to_notes(original_scale, output_csv):
-    new_scale = re.sub('; ',';',original_scale)
+def find_tempo(xml_doc):
+    with open(xml_doc, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        for line in lines:
+            find_tempo = re.findall(r'\<sing tempo=\"(.*?)\"',line)
+            if not find_tempo == []:
+                tempo_string = ''.join(find_tempo)
+                tempo = int(tempo_string)
+    return tempo
+
+
+def scale_to_notes(xml_doc, output_csv=None):
+    with open(xml_doc, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        note_set = []
+        for line in lines:
+            notes = re.findall(r'\<s pd=\"(.*?)\"\>',line)
+            if not notes == []:
+                note_set.append(notes)
+    original_scale = [number for sublist in note_set for number in sublist + [';']][:-1]
+    new_scale = ''.join(original_scale)
+
     split_by_semicolon = new_scale.split(';')
     full_set = []
     all_notes = []
@@ -14,9 +35,9 @@ def scale_to_notes(original_scale, output_csv):
         full_set.append(string_element+ '\n')
     final_set = ''.join(full_set)
     # print(all_notes)
-
-    with open('%s'%output_csv, 'w', encoding='utf-8') as f:
-        f.write(final_set)
+    if not output_csv == 'None':
+        with open('%s'%output_csv, 'w', encoding='utf-8') as f:
+            f.write(final_set)
     return all_notes, list(map(float, all_durs))
 
 
@@ -39,7 +60,7 @@ def interval_times(intercept,tempo):
     return interval_begin, interval_end
 
 
-def textgrid_body():
+def textgrid_body(interval_begintimes, interval_endtimes):
     body = []
     for i in range(len(interval_begintimes)):
         one_interval = '\n'.join([str(interval_begintimes[i]), str(interval_endtimes[i]), '\"\"'])
@@ -67,27 +88,12 @@ def textgrid_header(audio_duration, total_interval, total_tier = 1):
     return header_text
 
 
-
 if __name__=='__main__':
-    scale = "G4 0.5;E4 0.5;NL 2;D4 0.5;C4 0.5;G4 0.5;E4 0.5;NL 3;G4 0.5;E4 0.5;" \
-            "NL 2;D4 0.5;C4 0.5;E4 0.5;D4 0.5;NL 3;G4 0.5;E4 0.5;NL 2;D4 0.5;C4 0.5;" \
-            "G4 0.5;E4 0.5;NL 3;G4 0.5;E4 0.5;NL 2.5;C4 0.5;E4 0.75;E4 0.75;F4 0.5;" \
-            "E4 0.75;D4 0.75;C4 3.5;G4 0.5;E4 3.5;D4 0.5;C4 3.5;E4 0.5;G4 2.5;NL 2;" \
-            "E4 1;G4 0.5;G4 0.5;E4 1;G4 0.5;G4 0.5;B4 0.5;C5 0.5;B4 0.5;C5 0.5;B4 1;" \
-            "G4 1;F4 0.5;E4 0.5;F4 0.5;E4 0.5;F4 1;E4 1;F4 0.5;E4 0.5;C4 0.5;D4 1.5;" \
-            "NL 1;E4 1;G4 0.5;G4 0.5;E4 1;G4 0.5;G4 0.5;B4 0.5;C5 0.5;B4 0.5;C5 0.5;" \
-            "B4 1;G4 1;F4 0.5;E4 0.5;F4 0.5;E4 0.5;F4 1;E4 1;F4 0.5;E4 0.5;F4 0.5;" \
-            "G4 1.5;NL 1;E4 1;G4 0.5;G4 0.5;E4 1;G4 0.5;G4 0.5;B4 0.5;C5 0.5;B4 0.5;" \
-            "C5 0.5;B4 1;G4 1;F4 0.5;E4 0.5;F4 0.5;E4 0.5;F4 1;E4 1;F4 0.5;E4 0.5;" \
-            "C4 0.5;D4 1.5;NL 1;E4 1;G4 0.5;G4 0.5;E4 1;G4 0.5;G4 0.5;B4 0.5;C5 0.5;B4 0.5;" \
-            "C5 0.5;B4 1;G4 1;F4 0.5;E4 0.5;F4 0.5;E4 0.5;F4 1;E4 1;E4 0.5;E4 0.5;E4 0.5;F4 0.5;" \
-            "E4 0.75;D4 0.75;C4 2.5; NL 1;G4 0.5;E4 3.5;D4 0.5;C4 3.5;NL 1;E4 0.75;E4 0.75;F4 0.5;" \
-            "E4 0.75;D4 0.75;C4 2.5"
-
-    notes, durs = scale_to_notes(scale,'test.csv')
-    interval_begintimes, interval_endtimes = interval_times(intercept=0,tempo=120)
-    body_text, audio_dur = textgrid_body()
+    xml_doc = "D:\Rokid\pycharm\generic\houlai.xml"
+    notes, durs = scale_to_notes(xml_doc)
+    interval_begintimes, interval_endtimes = interval_times(intercept=0.02, tempo=find_tempo(xml_doc))
+    body_text, audio_dur = textgrid_body(interval_begintimes, interval_endtimes)
     header_text = textgrid_header(audio_dur, len(notes))
-
-    with open('piggy_whole.TextGrid', 'w', encoding='utf-8') as f:
+    filename = os.path.splitext(xml_doc)[0]
+    with open(filename + '.TextGrid', 'w', encoding='utf-8') as f:
         f.write(header_text + '\n' + body_text)
