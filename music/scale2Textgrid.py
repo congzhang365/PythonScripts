@@ -1,6 +1,7 @@
 import re
 import os
 
+
 def find_tempo(xml_doc):
     with open(xml_doc, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -35,13 +36,16 @@ def scale_to_notes(xml_doc, output_csv=None):
         full_set.append(string_element+ '\n')
     final_set = ''.join(full_set)
     # print(all_notes)
+    notes = all_notes
+    durs = list(map(float, all_durs))
+    print(notes,durs)
     if not output_csv == 'None':
         with open('%s'%output_csv, 'w', encoding='utf-8') as f:
             f.write(final_set)
-    return all_notes, list(map(float, all_durs))
+    return notes, durs
 
 
-def interval_times(intercept,tempo):
+def interval_times(durs,intercept,tempo):
     interval_begin = []
     interval_end = []
 
@@ -49,13 +53,13 @@ def interval_times(intercept,tempo):
         if num == 0:
             segment_begin = intercept
             segment_end = segment_begin + 60 / tempo * durs[num]
-            interval_begin.append(round(segment_begin,3))
-            interval_end.append(round(segment_end,3))
+            interval_begin.append(round(segment_begin,8))
+            interval_end.append(round(segment_end,8))
         else:
             segment_begin = interval_end[num-1]
             segment_end = segment_begin + 60 / tempo * durs[num]
-            interval_begin.append(round(segment_begin,3))
-            interval_end.append(round(segment_end, 3))
+            interval_begin.append(round(segment_begin,8))
+            interval_end.append(round(segment_end, 8))
 
     return interval_begin, interval_end
 
@@ -88,12 +92,20 @@ def textgrid_header(audio_duration, total_interval, total_tier = 1):
     return header_text
 
 
-if __name__=='__main__':
-    xml_doc = "D:\Rokid\pycharm\generic\houlai.xml"
-    notes, durs = scale_to_notes(xml_doc)
-    interval_begintimes, interval_endtimes = interval_times(intercept=0.02, tempo=find_tempo(xml_doc))
+def N2T(xml_dir,intercept=0.02):
+    notes, durs = scale_to_notes(xml_dir)
+    interval_begintimes, interval_endtimes = interval_times(durs, intercept, tempo=find_tempo(xml_dir))
+    print(xml_dir, 'Tempo:', find_tempo(xml_dir))
     body_text, audio_dur = textgrid_body(interval_begintimes, interval_endtimes)
     header_text = textgrid_header(audio_dur, len(notes))
-    filename = os.path.splitext(xml_doc)[0]
+    filename = os.path.splitext(xml_dir)[0]
+
     with open(filename + '.TextGrid', 'w', encoding='utf-8') as f:
         f.write(header_text + '\n' + body_text)
+        print("Done!")
+
+if __name__=='__main__':
+    xml_doc = "D:\Rokid\Projects\Songs/tool\Tool Testing\midi2ssml_scripts\diyiciaideren.xml"
+    N2T(xml_doc)
+    notes, durs = scale_to_notes(xml_doc)
+    print(interval_times(durs,0.07,find_tempo(xml_doc)))
