@@ -53,13 +53,17 @@ def interval_times(durs,intercept,tempo):
         if num == 0:
             segment_begin = intercept
             segment_end = segment_begin + 60 / tempo * durs[num]
-            interval_begin.append(round(segment_begin,8))
-            interval_end.append(round(segment_end,8))
+            # interval_begin.append(round(segment_begin,8))
+            # interval_end.append(round(segment_end,8))
+            interval_begin.append(segment_begin)
+            interval_end.append(segment_end)
         else:
             segment_begin = interval_end[num-1]
             segment_end = segment_begin + 60 / tempo * durs[num]
-            interval_begin.append(round(segment_begin,8))
-            interval_end.append(round(segment_end, 8))
+            # interval_begin.append(round(segment_begin,8))
+            # interval_end.append(round(segment_end, 8))
+            interval_begin.append(segment_begin)
+            interval_end.append(segment_end)
 
     return interval_begin, interval_end
 
@@ -92,7 +96,7 @@ def textgrid_header(audio_duration, total_interval, total_tier = 1):
     return header_text
 
 
-def N2T(xml_dir,intercept=0.02):
+def N2T(xml_dir,intercept, print_dur_log=0):
     notes, durs = scale_to_notes(xml_dir)
     interval_begintimes, interval_endtimes = interval_times(durs, intercept, tempo=find_tempo(xml_dir))
     print(xml_dir, 'Tempo:', find_tempo(xml_dir))
@@ -103,9 +107,19 @@ def N2T(xml_dir,intercept=0.02):
     with open(filename + '.TextGrid', 'w', encoding='utf-8') as f:
         f.write(header_text + '\n' + body_text)
         print("Done!")
+    if print_dur_log:
+        with open(filename + '.log', 'w', encoding='utf-8') as f:
+            f.write('ssml计算时长应为(秒)：\n%s\n'%audio_dur)
+            print('<dur_log printed>')
+
 
 if __name__=='__main__':
-    xml_doc = "D:\Rokid\Projects\Songs/tool\Tool Testing\midi2ssml_scripts\diyiciaideren.xml"
-    N2T(xml_doc)
-    notes, durs = scale_to_notes(xml_doc)
-    print(interval_times(durs,0.07,find_tempo(xml_doc)))
+    dir = "D:\Rokid\Projects\Songs/tool\Tool Testing\midi2ssml_scripts/"
+    for filename in os.listdir(dir):
+        if filename.endswith('.xml'):
+            N2T(dir + filename, 0.07, 1)
+
+        else:
+            continue
+    # xml = "D:\Rokid\Projects\Songs/tool\Tool Testing\midi2ssml_scripts/namejiaoao.xml"
+    # N2T(xml, 0.07, 1)
