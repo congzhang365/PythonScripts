@@ -28,7 +28,7 @@ def count_English_words(input_file, output_file):
 
 
 
-#
+#### unfinished code, probably useless
 # def
 #     with open('D:\Rokid\pycharm\English/new.txt','r', encoding='utf-8') as f:
 #         lines = f.readlines()
