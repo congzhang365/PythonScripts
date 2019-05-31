@@ -28,28 +28,25 @@ def process_replace_by_tag(source_data, map_dict, file_name, split='/'):
         f.write('\n'.join(write_lines))
 		
 if __name__=='__main__':
+    # get dictionary info
+    ch_map_full = pd.read_csv('ch_map.csv')
+    ch_map_s1 = ch_map_full.iloc[:, [0, 1]]
+    ch_map_s2 = ch_map_full.iloc[:, [0, 2]]
+    ch_map_rs = ch_map_full.iloc[:, [0, 3]]
+    ch_map_r = ch_map_full.iloc[:, [0, 4]]
+    ch_map_min = ch_map_full.iloc[:, [0, 5]]
 
-	# get dictionary info
-	ch_map_full = pd.read_csv('ch_map.csv')
-	ch_map_s1 = ch_map_full.iloc[:, [0, 1]]
-	ch_map_s2 = ch_map_full.iloc[:, [0, 2]]
-	ch_map_rs = ch_map_full.iloc[:, [0, 3]]
-	ch_map_r = ch_map_full.iloc[:, [0, 4]]
-	ch_map_min = ch_map_full.iloc[:, [0, 5]]
+    # make dictionaries
+    dict_s1 = make_dict(ch_map_s1)
+    dict_s2 = make_dict(ch_map_s2)
+    dict_rs = make_dict(ch_map_rs)
+    dict_r = make_dict(ch_map_r)
+    dict_min = make_dict(ch_map_min)
 
-	# make dictionaries
-	dict_s1 = make_dict(ch_map_s1)
-	dict_s2 = make_dict(ch_map_s2)
-	dict_rs = make_dict(ch_map_rs)
-	dict_r = make_dict(ch_map_r)
-	dict_min = make_dict(ch_map_min)
-
-	
-with open('people2014_clean.txt',  'r', encoding='UTF-8') as source_file:
-    ch_data = source_file.read().splitlines()
-
-	process_replace_by_tag(source_data=ch_data,map_dict=dict_s1,file_name='ch_s1',split='/')
-	process_replace_by_tag(source_data=ch_data,map_dict=dict_s2,file_name='ch_s2',split='/')
-	process_replace_by_tag(source_data=ch_data,map_dict=dict_rs,file_name='ch_rs',split='/')
-	process_replace_by_tag(source_data=ch_data,map_dict=dict_r,file_name='ch_r',split='/')
-	process_replace_by_tag(source_data=ch_data,map_dict=dict_min,file_name='ch_min',split='/')
+    with open('people2014_clean.txt',  'r', encoding='UTF-8') as source_file:
+        ch_data = source_file.read().splitlines()
+        process_replace_by_tag(source_data=ch_data,map_dict=dict_s1,file_name='ch_s1',split='/')
+        process_replace_by_tag(source_data=ch_data,map_dict=dict_s2,file_name='ch_s2',split='/')
+        process_replace_by_tag(source_data=ch_data,map_dict=dict_rs,file_name='ch_rs',split='/')
+        process_replace_by_tag(source_data=ch_data,map_dict=dict_r,file_name='ch_r',split='/')
+        process_replace_by_tag(source_data=ch_data,map_dict=dict_min,file_name='ch_min',split='/')

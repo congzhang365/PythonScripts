@@ -1,7 +1,7 @@
 import re
 
-def count_English(input_file, )
-    with open('D:\Rokid\pycharm\English/new.txt','r', encoding='utf-8') as f:
+def count_English(input_file):
+    with open('%s'%input_file,'r', encoding='utf-8') as f:
         lines = f.readlines()
         wrong_ones = []
         correct_ones = []

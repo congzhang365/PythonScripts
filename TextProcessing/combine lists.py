@@ -21,11 +21,11 @@ if __name__ == "__main__":
     all_num = list(string.digits)
     all_num.append('10')
 
-	bi_list=[all_char,all_char]
-	bi_char = combine_lists(bi_list, '', 'bi_char')
+    bi_list=[all_char,all_char]
+    bi_char = combine_lists(bi_list, '', 'bi_char')
 
-	# tri_list = [all_char,all_char,all_char]
-	# tri_char = combine_lists(tri_list, '', 'tri_char')
+    # tri_list = [all_char,all_char,all_char]
+    # tri_char = combine_lists(tri_list, '', 'tri_char')
 
-	num_char_list = [all_char, all_num,all_char]
-	num_char = combine_lists(num_char_list,'','num_char')
+    num_char_list = [all_char, all_num,all_char]
+    num_char = combine_lists(num_char_list,'','num_char')

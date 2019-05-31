@@ -10,8 +10,8 @@ def extract_lines(file, start_num, end_num, output_file):
             new_line = lines[i].split('\t')
             if not all(ord(c) < 255 for c in new_line[1]):	# check for non-utf8 characters
                 # print(new_line[1])
-            new_line = '\t'.join(new_line)
-            new_lines.append(new_line)
+                new_line = '\t'.join(new_line)
+                new_lines.append(new_line)
         # new_lines.
     with open('%s.txt' % output_file, 'w', encoding='utf-8-sig') as file:
         file.write(''.join(new_lines)[:-1])
