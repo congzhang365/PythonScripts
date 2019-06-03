@@ -39,7 +39,8 @@ def syllable_intervals_data(row):
                          'native': row['native'],
                          'interval': intervals})
 
+if __name__ == '__main__':
 
-corpus = pd.read_csv("corpus/corpus.csv")
-# Concatenate all data from the corpus into one big pandas DataFrame
-data = pd.concat([syllable_intervals_data(row) for _, row in corpus.iterrows()])
+    corpus = pd.read_csv("corpus/corpus.csv")
+    # Concatenate all data from the corpus into one big pandas DataFrame
+    data = pd.concat([syllable_intervals_data(row) for _, row in corpus.iterrows()])

@@ -30,13 +30,14 @@ def facet_util(data, **kwargs):
         plt.ylabel("")
         plt.yticks([])
 
+if __name__ == '__main__':
 
-results = pd.read_csv("audio/digit_list.csv")
+    results = pd.read_csv("audio/digit_list.csv")
 
-grid = sns.FacetGrid(results, row='digit', col='speaker_id')
-grid.map_dataframe(facet_util)
-grid.set_titles(col_template="{col_name}", row_template="{row_name}")
-grid.set_axis_labels("time [s]", "frequency [Hz]")
-grid.set(xlim=(0, None))
-# Optionally: grid.set(facecolor='white')
-plt.show()
+    grid = sns.FacetGrid(results, row='digit', col='speaker_id')
+    grid.map_dataframe(facet_util)
+    grid.set_titles(col_template="{col_name}", row_template="{row_name}")
+    grid.set_axis_labels("time [s]", "frequency [Hz]")
+    grid.set(xlim=(0, None))
+    # Optionally: grid.set(facecolor='white')
+    plt.show()

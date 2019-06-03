@@ -9,17 +9,18 @@ https://ai.vub.ac.be/~yajadoul/jadoul_introducing-parselmouth_a-python-interface
 
 # Maximum likelihood (ML/REML) estimation of mixed-effects linear model
 import statsmodels.formula.api as smf
+if __name__ == '__main__':
 
 
-model = smf.mixedlm('interval ~ native', data, groups=data['speaker'])
-results = model.fit()
-print(results.summary())
+    model = smf.mixedlm('interval ~ native', data, groups=data['speaker'])
+    results = model.fit()
+    print(results.summary())
 
 
-# Bayesian estimation of mixed-effects linear model
-import bambi
+    # Bayesian estimation of mixed-effects linear model
+    import bambi
 
 
-model = bambi.Model(data)
-results = model.fit('interval ~ native', random=['1|speaker'])
-print(results.summary())
+    model = bambi.Model(data)
+    results = model.fit('interval ~ native', random=['1|speaker'])
+    print(results.summary())

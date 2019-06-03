@@ -43,27 +43,29 @@ def draw_intensity(intensity):
     plt.ylabel("intensity [dB]")
 
 
-snd = parselmouth.Sound("D:\Rokid\Files\Wechat files接收\wav\cmp-12.wav")
-pitch = snd.to_pitch()
-intensity = snd.to_intensity()
-# Optionally pre-emphasize the sound before calculating the spectrogram
-snd.pre_emphasize()
-spectrogram = snd.to_spectrogram(maximum_frequency=8000.0)
+if __name__ == '__main__':
 
-plt.figure()
-draw_spectrogram(spectrogram)
-plt.twinx()
-draw_pitch(pitch)
-draw_intensity(intensity)
-plt.xlim([snd.xmin, snd.xmax])
-plt.show()  # or plt.savefig("spectrogram.pdf")
+    snd = parselmouth.Sound("D:\Rokid\Files\Wechat files接收\wav\cmp-12.wav")
+    pitch = snd.to_pitch()
+    intensity = snd.to_intensity()
+    # Optionally pre-emphasize the sound before calculating the spectrogram
+    snd.pre_emphasize()
+    spectrogram = snd.to_spectrogram(maximum_frequency=8000.0)
 
-# Another plot
-# Plot nice figures using Python's "standard" matplotlib library
-snd = parselmouth.Sound("D:\Rokid\Files\Wechat files接收\wav\cmp-12.wav")
-plt.figure()
-plt.plot(snd.xs(), snd.values.T)
-plt.xlim([snd.xmin, snd.xmax])
-plt.xlabel("time [s]")
-plt.ylabel("amplitude")
-plt.show() # or plt.savefig("sound.png"), or plt.savefig("sound.pdf")
+    plt.figure()
+    draw_spectrogram(spectrogram)
+    plt.twinx()
+    draw_pitch(pitch)
+    draw_intensity(intensity)
+    plt.xlim([snd.xmin, snd.xmax])
+    plt.show()  # or plt.savefig("spectrogram.pdf")
+
+    # Another plot
+    # Plot nice figures using Python's "standard" matplotlib library
+    snd = parselmouth.Sound("D:\Rokid\Files\Wechat files接收\wav\cmp-12.wav")
+    plt.figure()
+    plt.plot(snd.xs(), snd.values.T)
+    plt.xlim([snd.xmin, snd.xmax])
+    plt.xlabel("time [s]")
+    plt.ylabel("amplitude")
+    plt.show() # or plt.savefig("sound.png"), or plt.savefig("sound.pdf")
