@@ -1,22 +1,44 @@
 import os
-import argparse
-
-source = "D:\\Rokid\\Projects\\English\\toklin\\interval"
 
 
-def replace_name_batch_post_fix(source, suffix, target_suffix):
-    for f in os.listdir(source):
-        old = os.path.join(source, f)
-        # print(old)
-        new = old.replace('.' + suffix, '.' + target_suffix)
-        os.rename(old, new)
+def replace_file_extension(input_dir, output_dir, old_extension, new_extension):
+    for f in os.listdir(input_dir):
+        old = os.path.join(input_dir, f)
+        new = old.replace(old_extension, new_extension)
+        os.rename(os.path.join(input_dir, old), os.path.join(output_dir, new))
+
+
+def add_suffix(input_dir, output_dir, suffix, extension):
+    for f in os.listdir(input_dir):
+        if f.endswith(extension):
+            filename = f.split('.')[0]
+            os.rename(os.path.join(input_dir, f), os.path.join(output_dir, '%s%s%s' % (filename, suffix, extension)))
+
+
+def add_prefix(input_dir, output_dir, prefix):
+    for f in os.listdir(input_dir):
+        os.rename(os.path.join(input_dir, f), os.path.join(output_dir, "{}{}".format(prefix, f)))
 
 
 if __name__ == '__main__':
-    parse = argparse.ArgumentParser()
-    parse.add_argument('--source', type=str, default='123')
-    parse.add_argument('--suffix', type=str)
-    parse.add_argument('--target', type=str)
-    args = parse.parse_args()
-    replace_name_batch_post_fix(args.source, args.suffix, args.target)
-    print(args.source)
+
+
+    input_dir = "C:/Users/test/"
+    output_dir = "C:/Users/test/"
+
+
+    # example of replacing file extension: e.g. abc.txt -> abc.TextGrid
+    old_extension = '.txt'
+    new_extension = '.TextGrid'
+    replace_file_extension(input_dir, output_dir, old_extension, new_extension)
+
+
+    # example of adding prefix: e.g. abc.txt -> new_abc.txt
+    prefix = 'new_'
+    add_prefix(input_dir, output_dir, prefix)
+
+
+    # example of replacing adding suffix to filename e.g. abc.txt -> abc_new.txt
+    suffix = '_new'
+    extension = '.txt'
+    add_suffix(input_dir, output_dir, suffix, extension)
