@@ -60,12 +60,12 @@ def resample(input_dir, output_dir, out_rate=8000):
 
 
 if __name__ == "__main__":
-    path_in = "C:/Users/audio/" #  add an asterisk for looping through subdir
-    path_out = "C:/Users/audio/"
+    path_in = "C:/cygwinfolders/p2fa/dial/44k/" #  add an asterisk for looping through subdir
+    path_out = "C:/cygwinfolders/p2fa/dial/"
 
     # check the number of channels
     check_channel_num(path_in)
     # reduce to mono
     reduce_channel(path_in, path_out)
     # resample audio
-    resample(path_in, path_out, out_rate=8000)
+    resample(path_in, path_out, out_rate=16000)
