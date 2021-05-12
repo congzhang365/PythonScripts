@@ -4,6 +4,8 @@ import re
 import pandas as pd
 import os
 import more_itertools as mit
+from itertools import groupby
+
 
 
 def mark_accent(index_list, text_list, task, participant, pragmatics_list, brackets, sourceTier_name, targetTier_name,
@@ -22,7 +24,7 @@ def mark_accent(index_list, text_list, task, participant, pragmatics_list, brack
             tg = tgio.openTextgrid("%s/%s_%s_%s.TextGrid" % (in_tg, task, participant, index))
             keywordIntervals = []
             sourceTier = tg.tierDict[sourceTier_name]
-            amTier = tg.tierDict[targetTier_name]
+            targetTier = tg.tierDict[targetTier_name]
 
             for keywords in keywordList:
                 keyword = keywords.split(" ")
@@ -37,7 +39,7 @@ def mark_accent(index_list, text_list, task, participant, pragmatics_list, brack
                         keywordIntervals.append(sourceTier.entryList[i])
                     for j in range(len(keywordIntervals)):
                         new_entry = [(start, stop, new_text) for start, stop, label in keywordIntervals]
-                        amTier.insertEntry(new_entry[j], collisionCode='replace')
+                        targetTier.insertEntry(new_entry[j], collisionCode='replace')
 
 
                 # if there's only one word in the brackets
@@ -47,16 +49,29 @@ def mark_accent(index_list, text_list, task, participant, pragmatics_list, brack
                     findMatches_1 = sourceTier.find(str(keyword[0]))
                     findMatches_2 = sourceTier.find(str(keyword[1]))
 
+
                     for ind in findMatches_1:
                         if ind + 1 in findMatches_2:
                             findMatches = [ind, ind + 1]
+                            # print(findMatches)
 
+                            new_entries = []
                             for i in findMatches:
-                                keywordIntervals.append(sourceTier.entryList[i])
+                                new_entries.append(sourceTier.entryList[i])
 
-                            for j in range(len(keywordIntervals)):
-                                new_entry = [(start, stop, new_text) for start, stop, label in keywordIntervals]
-                                amTier.insertEntry(new_entry[j], collisionCode='replace')
+                            time_points = []
+
+                            for j in range(len(new_entries)):
+                                # new_entry = [(start, stop, label) for start, stop, label in keywordIntervals]
+                                start = new_entries[j][0]
+                                stop = new_entries[j][1]
+                                time_points.append(start)
+                                time_points.append(stop)
+                                # time_points.append(stop)
+                            # print("!!---------", time_points)
+                            new_entry = time_points[0], time_points[3], new_text
+                            targetTier.insertEntry(new_entry, collisionCode='replace')
+
                 elif len(keyword) == 3:
                     print(index, keyword)
 
@@ -70,12 +85,28 @@ def mark_accent(index_list, text_list, task, participant, pragmatics_list, brack
                             if (ind + 1 in findMatches_2) & (ind + 2 in findMatches_3):
                                 findMatches = [ind, ind + 1, ind + 2]
 
-                                for i in findMatches:
-                                    keywordIntervals.append(sourceTier.entryList[i])
+                                # for i in findMatches:
+                                #     keywordIntervals.append(sourceTier.entryList[i])
+                                #
+                                # for j in range(len(keywordIntervals)):
+                                #     new_entry = [(start, stop, new_text) for start, stop, label in keywordIntervals]
+                                #     targetTier.insertEntry(new_entry[j], collisionCode='replace')
+                            new_entries = []
+                            for i in findMatches:
+                                new_entries.append(sourceTier.entryList[i])
 
-                                for j in range(len(keywordIntervals)):
-                                    new_entry = [(start, stop, new_text) for start, stop, label in keywordIntervals]
-                                    amTier.insertEntry(new_entry[j], collisionCode='replace')
+                            time_points = []
+
+                            for j in range(len(new_entries)):
+                                # new_entry = [(start, stop, label) for start, stop, label in keywordIntervals]
+                                start = new_entries[j][0]
+                                stop = new_entries[j][1]
+                                time_points.append(start)
+                                time_points.append(stop)
+                                # time_points.append(stop)
+                            # print("!!---------", time_points)
+                            new_entry = time_points[0], time_points[5], new_text
+                            targetTier.insertEntry(new_entry, collisionCode='replace')
                     else:
                         print(index, "!!!!!!!! Skipped! Check log!!!!!!!!")
                         # print(index, pragmatics)
@@ -95,6 +126,7 @@ def mark_accent(index_list, text_list, task, participant, pragmatics_list, brack
 
         else:
             print(index, 'No accent.')
+
 
 
 if __name__ == '__main__':
@@ -182,5 +214,3 @@ if __name__ == '__main__':
         new_text = "S"
         mark_accent(index_list, text_list, task, participant, pragmatics_list, brackets, sourceTier_name,
                     targetTier_name, new_text)
-
-
