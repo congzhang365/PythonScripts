@@ -47,25 +47,26 @@ def resample(input_dir, output_dir, out_rate=8000):
         for root, dirs, files in os.walk(input_dir):
             break
         for file in files:
-            if file.endswith('.wav'):
+            if file.endswith('.WAV'):
                 snd = parselmouth.Sound(input_dir + file)
                 # dur = snd.get_total_duration()
                 resampled = call(snd, "Resample...", out_rate, 50)
                 # print(pitch_tier)
                 if os.path.isdir(output_dir):
                     resampled.save("%s%s"%(output_dir,file), "WAV")
+                    # print('done')
                 else:
                     os.makedirs(os.path.dirname(output_dir))
                     resampled.save("%s%s" % (output_dir, file), "WAV")
 
 
 if __name__ == "__main__":
-    path_in = "C:/cygwinfolders/p2fa/dial/44k/" #  add an asterisk for looping through subdir
-    path_out = "C:/cygwinfolders/p2fa/dial/"
+    path_in = "C:/Users/sprin/Documents/Alignment/timit_test/" #  add an asterisk for looping through subdir
+    path_out = "C:/Users/sprin/Documents/Alignment/timit_test/"
 
     # check the number of channels
-    check_channel_num(path_in)
+    # check_channel_num(path_in)
     # reduce to mono
-    reduce_channel(path_in, path_out)
+    # reduce_channel(path_in, path_out)
     # resample audio
     resample(path_in, path_out, out_rate=16000)
